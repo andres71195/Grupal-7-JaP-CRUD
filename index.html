@@ -30,8 +30,8 @@
                     <div class="col-md-6">
                         <div class="border p-3 my-3 position-relative" id="post-box">
                             <h6>Ingresar nuevo registro</h6>
-                            <input type="text" id="inputPostNombre" class="form-control my-1" placeholder="Nombre">
-                            <input type="text" id="inputPostApellido" class="form-control my-1" placeholder="Apellido">
+                            <input type="text" id="inputPostNombre" class="form-control my-1" placeholder="Nombre" oninput=toggleBtnAgregar()>
+                            <input type="text" id="inputPostApellido" class="form-control my-1" placeholder="Apellido" oninput=toggleBtnAgregar()>
                             <button id="btnPost" class="btn btn-success position-absolute bottom-0 mb-3" disabled>
                                 Agregar</button>
                         </div>
@@ -42,15 +42,15 @@
                         <div class="border p-3 my-3 position-relative" id="put-box">
                             <h6>Modificar registro</h6>
                             <input type="number" id="inputPutId" class="form-control"
-                                placeholder="ID del registro a modificar">
-                            <button id="btnPut" class="btn btn-warning position-absolute bottom-0 mb-3" disabled>
+                                placeholder="ID del registro a modificar" oninput=toggleButtons(inputModificar,btnModificar)>
+                            <button id="btnPut" class="btn btn-warning position-absolute bottom-0 mb-3" data-bs-toggle="modal" data-bs-target="#dataModal" disabled>
                                 Modificar</button>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="border p-3 my-3 position-relative" id="delete-box">
                             <h6>Eliminar registro</h6>
-                            <input type="number" id="inputDelete" class="form-control" placeholder="ID a eliminar">
+                            <input type="number" id="inputDelete" class="form-control" placeholder="ID a eliminar" oninput="toggleButtons(inputEliminar,btnEliminar)">
                             <button id="btnDelete" class="btn btn-danger position-absolute bottom-0 mb-3" disabled>
                                 Borrar</button>
                         </div>
@@ -70,7 +70,7 @@
     <div class="alert alert-danger fade" id="alert-error" role="alert">
         Algo salió mal...
     </div>
-    <div class="modal fade" tabindex="-1" id="dataModal">
+    <div class="modal fade" tabindex="-1" id="dataModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">

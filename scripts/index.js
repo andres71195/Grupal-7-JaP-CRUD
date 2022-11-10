@@ -1,26 +1,22 @@
 const urlUsuarios = "https://6363a4d637f2167d6f7ed742.mockapi.io/Users";
 let btnBuscar = document.getElementById( "btnGet1");
-let InputBuscar = document.getElementById("inputGet1Id");
+let inputBuscar = document.getElementById("inputGet1Id");
 const btnAgregar = document.getElementById("btnPost");
-let InputAgregarNombre = document.getElementById("inputPostNombre");
-let InputAgregarApellido = document.getElementById("inputPostApellido");
+let inputAgregarNombre = document.getElementById("inputPostNombre");
+let inputAgregarApellido = document.getElementById("inputPostApellido");
 const btnModificar = document.getElementById("btnPut");
 let inputModificar = document.getElementById("inputPutId");
 const btnEliminar = document.getElementById("btnDelete");
 let inputEliminar = document.getElementById("inputDelete"); 
-let consola = document.getElementById("results");
+let blackConsole = document.getElementById("results");
+const alertError = document.getElementById("alert-error");
 let usuarios = []
-/* 
-function getData(urlFetch, metodo) {
-fetch(urlFetch, metodo) 
-.then((response) => console.log(response.json())) 
-.then((data) => usuarios = (data))
-} */
 
-let getData = function(url, metodo){
+
+let getData = function(url, metodo, data){
     let result = {};
     
-    return fetch(url, {method: metodo})
+    return fetch(url, {method: metodo, headers:{"Content-Type": "application/json"}, body: JSON.stringify(data)})
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -40,24 +36,79 @@ let getData = function(url, metodo){
     });
 }
 
+
+function toggleBtnAgregar(){  
+    if(inputAgregarNombre.value && inputAgregarApellido.value){ 
+    btnAgregar.disabled = false
+    } else {
+        btnAgregar.disabled = true
+    }
+}
+
+
+function toggleButtons(input1, inputBtn){
+    if(input1.value){
+        inputBtn.disabled = false
+        
+    } else {
+        inputBtn.disabled = true
+    }
+}
+
+
+function showConsole(id, name, lastname) {
+    blackConsole.innerHTML += `<li>ID: ${id}</li>
+                                <li>NAME: ${name}</li>
+                                <li>LASTNAME: ${lastname}</li>
+                                <br>`
+}
+
+
+
+
 btnBuscar.addEventListener("click", ()=>{
-    if (InputBuscar.value == ""){
+    if (inputBuscar.value == ""){
     getData(urlUsuarios, 'GET').then(function(resultObj){
         if (resultObj.status === "ok"){
             usuarios = resultObj.data
         }
+        alertError.classList.remove("show")
+        blackConsole.innerHTML = ""  
+        for (let i = 0; i < usuarios.length; i++) { 
+            let users = usuarios[i]; 
+            let {id, name, lastname} = users    
+            
+            showConsole(id, name, lastname)    
+        }
+    })
+} 
 
-            for (let i = 0; i < usuarios.length; i++) { 
-                let users = usuarios[i]; 
-                let {id, name, lastname} = users    
-              
-            consola.innerHTML += `<li>ID: ${id}</li>
-                                <li>NAME: ${name}</li>
-                                <li>LASTNAME: ${lastname}</li>
-                                <br>`    
-                            }
-                        })
-                    }
+if(inputBuscar.value){
+    getData(urlUsuarios + "/" + inputBuscar.value, 'GET').then(function(resultObj){
+        if (resultObj.status === "ok"){
+            usuarios = resultObj.data
+            }
+            let {id, name, lastname} = usuarios                    
+                if (inputBuscar.value === id){
+                        blackConsole.innerHTML = ""
+                        alertError.classList.remove("show")
+                        showConsole(id,name,lastname)
+                } else {
+                    blackConsole.innerHTML = ""
+                    alertError.classList.add("show")
+                }
+        })
+    }   
+})
 
-})      
+
+btnAgregar.addEventListener("click", ()=>{
+    getData(urlUsuarios, 'POST').then(function(resultObj){
+            if (resultObj.status === "ok"){
+                usuarios = resultObj.data
+            }
+        })
+})
+
+
 
