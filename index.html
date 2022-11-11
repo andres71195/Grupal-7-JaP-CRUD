@@ -43,7 +43,7 @@
                             <h6>Modificar registro</h6>
                             <input type="number" id="inputPutId" class="form-control"
                                 placeholder="ID del registro a modificar" oninput=toggleButtons(inputModificar,btnModificar)>
-                            <button id="btnPut" class="btn btn-warning position-absolute bottom-0 mb-3" data-bs-toggle="modal" data-bs-target="#dataModal" disabled>
+                            <button id="btnPut" class="btn btn-warning position-absolute bottom-0 mb-3"  data-bs-toggle="modal" disabled>
                                 Modificar</button>
                         </div>
                     </div>
@@ -67,9 +67,13 @@
                 Programar</a> - 2022</p>
         <p class="mb-1">Generado con fines estrictamente educativos.</p>
     </footer>
+    <!-- ALERTA -->
+    
     <div class="alert alert-danger fade" id="alert-error" role="alert">
         Algo salió mal...
     </div>
+
+    <!-- MODAL -->
     <div class="modal fade" tabindex="-1" id="dataModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -81,7 +85,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnSendChanges" disabled>Guardar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnSendChanges" disabled>Guardar</button>
                 </div>
             </div>
         </div>
