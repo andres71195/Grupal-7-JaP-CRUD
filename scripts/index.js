@@ -179,7 +179,7 @@ btnGuardar.addEventListener("click", (e) => {
                 for (let i = 0; i < usuarios.length; i++) {
                     let users = usuarios[i];
                     let { id, name, lastname } = users
-    
+
                     showConsole(id, name, lastname)
                 }
                 inputModificar.value = "";
@@ -188,4 +188,24 @@ btnGuardar.addEventListener("click", (e) => {
     })
 
 });
+
+//Código para establecer funcionalidad al dar click en el botón borrar
+btnEliminar.addEventListener("click", () => {
+    if (inputEliminar.value) {
+        //si hay un valor ingresado, el metodo delete lo borra de la lista
+        getData(urlUsuarios + "/" + inputEliminar.value, 'DELETE').then(function (resultObj) {
+            if (resultObj.status === "ok") {
+                usuarios = resultObj.data
+            }
+            alertError.classList.remove("show")
+            blackConsole.innerHTML = ""
+            for (let i = 0; i < usuarios.length; i++) {
+                let users = usuarios[i];
+                let { id, name, lastname } = users
+
+                showConsole(id, name, lastname)
+            }
+        })
+    }
+})
 
