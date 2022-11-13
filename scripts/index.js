@@ -109,12 +109,38 @@ btnBuscar.addEventListener("click", () => {
 
 
 btnAgregar.addEventListener("click", () => {
-    getData(urlUsuarios, 'POST').then(function (resultObj) {
+    getData(urlUsuarios, 'POST', { "name": inputAgregarNombre.value, "lastname": inputAgregarApellido.value }).then(function (resultObj) {
         if (resultObj.status === "ok") {
-            usuarios = resultObj.data
+
+                    //Si status==ok, hacemos una petición para obtener el registro completo y lo guardamos
+
+                    getData(urlUsuarios, 'GET').then(function (resultObj) {
+                        if (resultObj.status === "ok") {
+                            usuarios = resultObj.data
+                        }
+                        //Removemos la alerta (en caso de que esté activa) y limpiamos la consola (en caso tenga contenido)
+                        alertError.classList.remove("show")
+                        blackConsole.innerHTML = ""
+        
+                        //Recorremos array y mostramos los usuarios en la consola a través de showConsole()
+                        for (let i = 0; i < usuarios.length; i++) {
+                            let users = usuarios[i];
+                            let { id, name, lastname } = users
+        
+                            showConsole(id, name, lastname)
+                        }
+                        inputAgregarNombre.value = "";
+                        inputAgregarApellido.value = "";
+                        toggleBtnAgregar();
+                    })
+
+
+
+
         }
     })
 });
+
 
 //Código para establecer funcionalidad al dar click en el botón modificar
 
@@ -162,7 +188,7 @@ btnGuardar.addEventListener("click", (e) => {
 
     //Código para modificar registro
 
-    getData(urlUsuarios + "/" + inputModificar.value, 'PUT',{"name": inputModificarNombre.value, "lastname": inputModificarApellido.value}).then(function (resultObj) {
+    getData(urlUsuarios + "/" + inputModificar.value, 'PUT', { "name": inputModificarNombre.value, "lastname": inputModificarApellido.value }).then(function (resultObj) {
         if (resultObj.status === "ok") {
 
             //Si status==ok, hacemos una petición para obtener el registro completo y lo guardamos
@@ -195,17 +221,33 @@ btnEliminar.addEventListener("click", () => {
         //si hay un valor ingresado, el metodo delete lo borra de la lista
         getData(urlUsuarios + "/" + inputEliminar.value, 'DELETE').then(function (resultObj) {
             if (resultObj.status === "ok") {
-                usuarios = resultObj.data
-            }
-            alertError.classList.remove("show")
-            blackConsole.innerHTML = ""
-            for (let i = 0; i < usuarios.length; i++) {
-                let users = usuarios[i];
-                let { id, name, lastname } = users
 
-                showConsole(id, name, lastname)
+                //Si status==ok, hacemos una petición para obtener el registro completo y lo guardamos
+
+                getData(urlUsuarios, 'GET').then(function (resultObj) {
+                    if (resultObj.status === "ok") {
+                        usuarios = resultObj.data
+                    }
+                    //Removemos la alerta (en caso de que esté activa) y limpiamos la consola (en caso tenga contenido)
+                    alertError.classList.remove("show")
+                    blackConsole.innerHTML = ""
+
+                    //Recorremos array y mostramos los usuarios en la consola a través de showConsole()
+                    for (let i = 0; i < usuarios.length; i++) {
+                        let users = usuarios[i];
+                        let { id, name, lastname } = users
+
+                        showConsole(id, name, lastname)
+                    }
+                    inputEliminar.value = "";
+
+
+                })
+            }
+            else {
+                alertError.classList.add("show");
             }
         })
     }
-})
+});
 
